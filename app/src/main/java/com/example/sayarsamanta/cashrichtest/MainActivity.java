@@ -32,29 +32,20 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     int RecyclerViewItemPosition ;
     TextView textViewShareValue,textViewFixedVale,textViewdynamaicText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerview1);
         textViewFixedVale=findViewById(R.id.fixedValue);
         textViewShareValue=findViewById(R.id.shareValue);
         relativeLayout=findViewById(R.id.dynamicColor);
         textViewdynamaicText=findViewById(R.id.dynamaicText);
-        final String[] array = {"Dynamic SIP","Earn more than normal SIP"};
-        textViewdynamaicText.post(new Runnable() {
-            int i = 0;
-            @Override
-            public void run() {
-                textViewdynamaicText.setText(array[i]);
-                i++;
-                if (i ==2)
-                    i = 0;
-                textViewdynamaicText.postDelayed(this, 5000);
-            }
-        });
+
+        updatingTitle();
+
         GetData service = RetrofitClient.getRetrofitInstance().create(GetData.class);
         Call<List<Model>> call = service.getAllData();
 
@@ -82,60 +73,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Adding on item click listener to RecyclerView.
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+    }
 
-            GestureDetector gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
-
-                @Override public boolean onSingleTapUp(MotionEvent motionEvent) {
-
-                    return true;
-                }
-
-            });
+    public void updatingTitle(){
+        final String[] array = {getString(R.string.dynamic_sip),getString(R.string.earn_more_than)};
+        textViewdynamaicText.post(new Runnable() {
+            int i = 0;
             @Override
-            public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
-
-                ChildView = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-                if(ChildView != null && gestureDetector.onTouchEvent(motionEvent)) {
-
-                    //Getting clicked value.
-                    RecyclerViewItemPosition = Recyclerview.getChildAdapterPosition(ChildView);
-
-                    // Showing clicked item value on screen using toast message.
-                    try {
-                        Toast.makeText(MainActivity.this, Number.get(RecyclerViewItemPosition), Toast.LENGTH_LONG).show();
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-
-                }
-
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
+            public void run() {
+                textViewdynamaicText.setText(array[i]);
+                i++;
+                if (i ==2)
+                    i = 0;
+                textViewdynamaicText.postDelayed(this, 5000);
             }
         });
-
     }
 
 
     private void loadDataList(List<Model> usersList) {
 
 //Get a reference to the RecyclerView//
-
-
-
-
         RecyclerViewHorizontalAdapter = new RecyclerViewAdapter(usersList);
 
 //Use a LinearLayoutManager with default vertical orientation//
@@ -196,8 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     selected_position = position;
                     notifyDataSetChanged();
-                    Log.d("check","true");
-
                     textViewShareValue.setText(list.get(position).getQuity()+"%");
                     int fixedValue=100-Integer.parseInt(list.get(position).getQuity());
                     if (fixedValue<50){
@@ -212,12 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-
-
-
-
-
-        }
+            }
 
         @Override
         public int getItemCount() {

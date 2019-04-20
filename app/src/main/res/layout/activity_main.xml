@@ -63,7 +63,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="103dp"
-        android:scrollbars="horizontal">
+        >
 
     </android.support.v7.widget.RecyclerView>
 

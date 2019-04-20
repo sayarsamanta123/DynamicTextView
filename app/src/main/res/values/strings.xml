@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CashRichTest</string>
+    <string name="dynamic_sip">Dynamic SIP</string>
+    <string name="earn_more_than">Earn more than normal SIP</string>
 </resources>
